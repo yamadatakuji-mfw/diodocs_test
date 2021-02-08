@@ -1,0 +1,12 @@
+# Dependencies
+obj/*
+
+# Compile output
+out/*
+bin/*
+
+# Visual Studio Code
+.vscode
+
+# Rider
+.idea

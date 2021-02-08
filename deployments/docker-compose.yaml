@@ -1,0 +1,22 @@
+version: "3.5"
+services:
+  diodocs:
+    container_name: diodocs
+    image: mcr.microsoft.com/dotnet/sdk:3.1-alpine
+    ports:
+      - 5000:5000
+    working_dir: "/app/src"
+    volumes:
+      - ../:/app
+    command: sh -c "apk add curl fontconfig &&
+      curl -O https://noto-website.storage.googleapis.com/pkgs/NotoSansCJKjp-hinted.zip &&
+      mkdir -p /usr/share/fonts/NotoSansCJKjp &&
+      mkdir -p /temp &&
+      unzip NotoSansCJKjp-hinted.zip -d /temp &&
+      cp /temp/NotoSansCJKjp-Regular.otf /usr/share/fonts/NotoSansCJKjp/ &&
+      rm NotoSansCJKjp-hinted.zip &&
+      rm -rf /temp &&
+      fc-cache -fv &&
+      dotnet watch run --urls http://0.0.0.0:5000"
+    environment:
+      APIKEY: apikey
