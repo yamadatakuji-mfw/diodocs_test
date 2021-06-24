@@ -39,10 +39,12 @@
 - request model は
   ```
   [
-      {
-          "template": [base64 encoded excel file]
-      }
-  ]
+    {
+      "template": [base64 encoded excel file],
+      "backgroundImage": [base64 encoded background image file]
+    }
+  ] 
+
   ```
 - response model は
   ```
@@ -50,8 +52,3 @@
       "outputData": [base64 encoded pdf file]
   }
   ```
-- テスト方法
-  1. 20 リクエストを同時に送る。　 → 　 pdf が 20 個作成される
-  2. 処理が全部終わったら、次の 20 リクエストを送る。
-  3. 15 回反復して、全 300 リクエスト、300 個の pdf が作成される
-  4. 非常に容量が小さいものはフォント埋め込み失敗ケース

@@ -4,6 +4,7 @@ using diodocs.Models;
 using System.Collections.Generic;
 using diodocs.Factory;
 using System.Linq;
+using GrapeCity.Documents.Excel.Drawing;
 
 namespace diodocs.Services
 {
@@ -34,12 +35,16 @@ namespace diodocs.Services
             {
                 using (MemoryStream mem = new MemoryStream(req[i].template))
                 {
-                    IWorkbook workbook = workbookFactory.newInstance();
-                    workbook.Open(mem, OpenFileFormat.Xlsx);
-
-                    workbook.Worksheets[0].Range["last_name"].Value = "ああああああああああ";
-
-                    workbooks.Add(workbook);
+                    using (MemoryStream backgroundImage = new MemoryStream(req[i].backgroundImage))
+                    {
+                        IWorkbook workbook = workbookFactory.newInstance();
+                        workbook.Open(mem, OpenFileFormat.Xlsx);
+                        IPageSetup pageSetup = workbook.Worksheets[0].PageSetup;
+                        IRange range = workbook.Worksheets[0].Range[pageSetup.PrintArea];
+                        logger.Info("range.Width:{0} range.Height:{1}", range.Width, range.Height);
+                        workbook.Worksheets[0].BackgroundPictures.AddPicture(backgroundImage, ImageType.PNG, 0, 0, range.Width, range.Height);
+                        workbooks.Add(workbook);
+                    }
                 }
             }
             using (MemoryStream memOut = new MemoryStream())
